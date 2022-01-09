@@ -58,6 +58,11 @@ def get_links():
     return links
 
 
+@app.get('/')
+def hello():
+    return 'my links API'
+
+
 @app.get('/my-links/{path}')
 def get_page(path):
     # link = links.find_one({"path": id})
