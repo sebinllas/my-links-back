@@ -42,4 +42,4 @@ def get_links(path):
 
 @app.get('/exists/{path}')
 def exists(path):
-    return links.find({"path": path}, {"_id": 0}).len > 0
+    return links.find_one({"path": path}, {"_id": 0}) != None
