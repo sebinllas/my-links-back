@@ -19,9 +19,12 @@ links = db['links']
 
 
 @app.post('/')
-def add_link(data: dict):
-    links.insert_one(data)
-    return 'saved'
+def add_links(data: dict):
+    if exists(data["path"]):
+        links.insert_one(data)
+        return 'saved'
+    raise HTTPException(
+        status_code=409, detail=f"path {data['path']} is already in use")
 
 
 @app.get('/')
@@ -30,8 +33,13 @@ def hello():
 
 
 @app.get('/my-links/{path}')
-def get_page(path):
+def get_links(path):
     l = links.find_one({"path": path}, {"_id": 0})
     if l is None:
         raise HTTPException(status_code=404, detail="Item not found")
     return links.find_one({"path": path}, {"_id": 0})
+
+
+@app.get('/exists/{path}')
+def exists(path):
+    return links.find_one({"path": path}, {"_id": 0}).len > 0
