@@ -21,10 +21,10 @@ links = db['links']
 @app.post('/')
 def add_links(data: dict):
     if exists(data["path"]):
-        links.insert_one(data)
-        return 'saved'
-    raise HTTPException(
-        status_code=409, detail=f"path {data['path']} is already in use")
+        raise HTTPException(
+            status_code=409, detail=f"path {data['path']} is already in use")
+    links.insert_one(data)
+    return 'saved'
 
 
 @app.get('/')
